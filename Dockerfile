@@ -3,9 +3,9 @@ FROM alpine:latest
 RUN apk add --update curl && \
 	rm -rf /var/cache/apk/*
 # Java Version and other ENV
-ENV JAVA_VERSION_MAJOR=8 \
+ENV JAVA_VERSION_MAJOR=9 \
     JAVA_VERSION_MINOR=144 \
-    JAVA_VERSION_BUILD=01 \
+    JAVA_VERSION_BUILD=181 \
     JAVA_PACKAGE=jdk \
     JAVA_HASH=090f390dda5b47b9b721c7dfaa008135 \
     GLIBC_VERSION="2.25-r0"
@@ -25,11 +25,12 @@ RUN apk upgrade --update && \
     echo "export LANG=C.UTF-8" > /etc/profile.d/locale.sh && \
     /usr/glibc-compat/sbin/ldconfig /lib /usr/glibc-compat/lib && \
     mkdir /opt && curl -jksSLH "Cookie: oraclelicense=accept-securebackup-cookie" -o /tmp/java.tar.gz \
-    http://download.oracle.com/otn-pub/java/jdk/${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-b${JAVA_VERSION_BUILD}/${JAVA_HASH}/${JAVA_PACKAGE}-${JAVA_VERSION_MAJOR}u${JAVA_VERSION_MINOR}-linux-x64.tar.gz && \
+    http://download.java.net/java/jdk${JAVA_VERSION_MAJOR}/archive/${JAVA_VERSION_BUILD}/binaries/jdk-${JAVA_VERSION_MAJOR}+${JAVA_VERSION_BUILD}_linux-x86_bin.tar.gz && \
     gunzip /tmp/java.tar.gz && \
     tar -C /opt -xf /tmp/java.tar && \
     apk del glibc-i18n && \
-    ln -s /opt/jdk1.${JAVA_VERSION_MAJOR}.0_${JAVA_VERSION_MINOR} /opt/jdk && \
+    ls -lrt /opt && \
+    ln -s /opt/jdk1.${JAVA_VERSION_MAJOR} /opt/jdk && \
     rm -rf /opt/jdk/*src.zip \
            /opt/jdk/lib/missioncontrol \
            /opt/jdk/lib/visualvm \
@@ -65,3 +66,4 @@ RUN apk upgrade --update && \
            /tmp/* /var/cache/apk/* && \
     echo 'hosts: files mdns4_minimal [NOTFOUND=return] dns mdns4' >> /etc/nsswitch.conf
 
+CMD ["java", "-version"]

@@ -1,2 +1,2 @@
-docker build -t rameshr/alpine-jdk8:latest .
-docker push rameshr/alpine-jdk8:latest
+docker build -t rameshr/alpine-jdk:jdk9 .
+#docker push rameshr/alpine-jdk:jdk9
